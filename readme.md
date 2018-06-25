@@ -1,16 +1,18 @@
 # jquery.spreadOut
-Spreads out children elements in a parent in a pseudo-random (natural looking) way.
+Spreads out children elements in a parent in a pseudo-random (natural looking) way. Converts parent to relative positioning, and children to absolute positioning
 
-*Usage*
+**Usage**
+
 $('selector').spreadOut({});
 
-*Options*
+**Options**
+
 You can add parameters to the options object:
 
 * childSelector - specify a selector to only grab specific children elements. Defaults to '.child'
 * avoidOtherChildren - specify whether non-selected children should be avoided (i.e. dont place items on top if possible) Defaults to false
 
-*Notes*
+**Notes**
 
 * The algorithm begins by not allowing overlaps. If it fails to find a spot, it will allow overlaps and try again (and allow overlaps for all future children)
 * There are currently a lot of areas for potential improvement
