@@ -35,10 +35,8 @@
            
             var avoidChildren = $(this).children().not( this.childSelector );
             for ( var i = 0; i < avoidChildren.length; i ++ ){
-               var avoidRect = new this.myRect( avoidChildren[0].offsetLeft, avoidChildren[0].offsetTop, $(avoidChildren[0]).width(), $(avoidChildren[0]).height() );
+               var avoidRect = new this.myRect( avoidChildren[i].offsetLeft, avoidChildren[i].offsetTop, $(avoidChildren[i]).width(), $(avoidChildren[i]).height() );
                this.avoidRects.push( avoidRect );
-               console.log('avoiding...',avoidChildren[0].offsetLeft, avoidChildren[0].offsetTop, $(avoidChildren[0]).width(), $(avoidChildren[0]).height());
-            }
          }
          
          var children = $(this).find( this.childSelector );
