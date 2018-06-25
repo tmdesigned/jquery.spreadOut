@@ -1,6 +1,6 @@
 // jquery.spreadout 
 // taylor morgan
-// v0.21
+// v0.22
 // tmdesigned.com 
 
 (function( $ ){
@@ -8,6 +8,7 @@
       
       this.childSelector = opts.hasOwnProperty( 'childSelector' ) ? opts.childSelector : '.child';
       this.avoidOtherChildren = opts.hasOwnProperty( 'avoidOtherChildren' ) ? opts.avoidOtherChildren : false;
+	  this.callback = opts.hasOwnProperty( 'finished' ) ? opts.finished : function(){} ;
 
       this.widthOfGrid = $(this).width();
       this.heightOfGrid = $(this).height();
@@ -37,6 +38,7 @@
             for ( var i = 0; i < avoidChildren.length; i ++ ){
                var avoidRect = new this.myRect( avoidChildren[i].offsetLeft, avoidChildren[i].offsetTop, $(avoidChildren[i]).width(), $(avoidChildren[i]).height() );
                this.avoidRects.push( avoidRect );
+			}
          }
          
          var children = $(this).find( this.childSelector );
@@ -44,7 +46,7 @@
             this.choose( children[i] );
          }
          
-
+		 this.callback();
       }
       
       this.update = function(){
@@ -63,6 +65,15 @@
               return this.x <= x && x <= this.x + this.width &&
                      this.y <= y && y <= this.y + this.height;
          }
+		 
+		 this.intersects = function( another ){
+			 if ( this.x + this.width < another.x ) return false;
+			 if ( this.x > another.x + another.width ) return false;
+			 if ( this.y + this.height < another.y ) return false;
+			 if ( this.y > another.y + another.height ) return false;
+			 return true;
+					
+		 }
       }
       
       this.choose = function( child ){
@@ -72,14 +83,18 @@
            this.allowOverlap = true;
         }
         best = this.findBestCandidate(child);
-        this.claimSpot( child, best[0],best[1] ); 
+		if( typeof best == 'undefined' ){
+           console.log('Could not place element');
+        }else{
+			this.claimSpot( child, best[0],best[1] ); 
+		}
 
       }
       
       this.findBestCandidate = function(child){
 
            var bestCandidate, bestDistance = 0;
-           for (var i = 0; i < 40; ++i) {
+           for (var i = 0; i < 20; ++i) {
              var c = [ Math.floor(Math.random() * this.rows[0].length), Math.floor( Math.random() * this.rows.length)];
               //console.log('------',i,') checking if',c[0],c[1],'is a good center...');
              if( !this.isValidSpot ( child, c[0],c[1] ) ){
@@ -120,15 +135,12 @@
         var bottomBound = Math.floor(y + (parseInt( $(child).height() ) / 2 ));
          //console.log('---------bounds:',leftBound,rightBound,topBound,bottomBound);
          
+		 var thisBox = new this.myRect(leftBound,topBound, $(child).width(), $(child).height() );
          //If avoiding other elements, run through those first
          if( this.avoidOtherChildren ){
+			
             for ( var i = 0; i < this.avoidRects.length; i++ ){
-               if ( this.avoidRects[i].contains( leftBound, topBound) ||
-                  this.avoidRects[i].contains( rightBound, topBound ) || 
-                  this.avoidRects[i].contains( leftBound, bottomBound ) || 
-                  this.avoidRects[i].contains( rightBound, bottomBound ) ){
-                  return false;
-               }
+               if (this.avoidRects[i].intersects( thisBox ) ) return false;
             }
          }
          
