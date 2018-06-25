@@ -1,6 +1,6 @@
 // jquery.spreadout 
 // taylor morgan
-// v0.2
+// v0.21
 // tmdesigned.com 
 
 (function( $ ){
@@ -32,12 +32,12 @@
       
       this.loopThroughChildren = function(){
          if( this.avoidOtherChildren ){
-            var parentRect = $(this)[0].getBoundingClientRect();
+           
             var avoidChildren = $(this).children().not( this.childSelector );
             for ( var i = 0; i < avoidChildren.length; i ++ ){
-               var bounds = avoidChildren[i].getBoundingClientRect();
-               var avoidRect = new this.myRect( bounds.left - parentRect.left, bounds.top - parentRect.top, bounds.width, bounds.height );
+               var avoidRect = new this.myRect( avoidChildren[0].offsetLeft, avoidChildren[0].offsetTop, $(avoidChildren[0]).width(), $(avoidChildren[0]).height() );
                this.avoidRects.push( avoidRect );
+               console.log('avoiding...',avoidChildren[0].offsetLeft, avoidChildren[0].offsetTop, $(avoidChildren[0]).width(), $(avoidChildren[0]).height());
             }
          }
          
@@ -173,7 +173,7 @@
             }
          }
          $(child).css({ 'position':'absolute', 'top':yStart, 'left':xStart } );
-         $(child).data( 'top', yStart).data( 'left',xStart).data('right',x + halfWidth).data( 'bottom', y + halfHeight);
+         //$(child).data( 'top', yStart).data( 'left',xStart).data('right',x + halfWidth).data( 'bottom', y + halfHeight); //for debugging
          this.samples.push({x:x,y:y});
       },
       
