@@ -84,7 +84,14 @@
         }
         best = this.findBestCandidate(child);
 		if( typeof best == 'undefined' ){
-           console.log('Could not place element');
+           if ( this.samples.length > 0 ){
+			   //use another item's successful spot, at least
+			   console.log('A bit crowded; reusing a spot.');
+			   var fallbackCtr = Math.floor(Math.random() * this.samples.length);
+			   this.claimSpot( child, this.samples[fallbackCtr].x, this.samples[fallbackCtr].y );
+		   }else{
+			   console.log('Not enough room to place.');
+		   }
         }else{
 			this.claimSpot( child, best[0],best[1] ); 
 		}
