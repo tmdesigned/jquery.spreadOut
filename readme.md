@@ -5,6 +5,10 @@ Spreads out children elements in a parent in a pseudo-random (natural looking) w
 
 $('selector').spreadOut({});
 
+**Demo**
+
+https://codepen.io/tmdesigned/pen/mKjyGa
+
 **Options**
 
 You can add parameters to the options object:
